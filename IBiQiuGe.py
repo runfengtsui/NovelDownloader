@@ -27,6 +27,7 @@ class IBiQiuGe(BaseTemplate):
         return content
     
     def crawl_ibiqiuge(self):
+        start_time = time.time()
         chapters_list = list(self.parse_book())
         for chapter_name, url in chapters_list:
             time.sleep(random.random())
@@ -36,4 +37,6 @@ class IBiQiuGe(BaseTemplate):
             chapter_content += self.parse_chapters(second_page)
             self.save_chapter(chapter_name, chapter_content)
             print(f"{chapter_name} 保存成功!")
+        self.total_time = time.time() - start_time
+        self.send_email()
 
