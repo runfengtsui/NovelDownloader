@@ -35,5 +35,4 @@ class Chinese81(BaseTemplate):
             self.save_chapter(chapter_name, chapter_content)
             print(f"{chapter_name} 保存成功!")
         self.total_time = time.time() - start_time
-        self.send_email()
 
