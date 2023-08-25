@@ -17,7 +17,7 @@ class Chinese81(BaseTemplate):
     
     
     def parse_chapters(self, chapter_url: str) -> List:
-        url = "https://www.81zw.com" + chapter_url
+        url = "https://www.81zw.app" + chapter_url
         html = self.get_html_text(url)
         while html == "":
             html = self.get_html_text(url)

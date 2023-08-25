@@ -2,7 +2,7 @@
 
 本项目为练习 Python 爬虫所作. 目前实现了以下网站的爬取:
 
-* [八一中文网](https://www.81zw.com)
+* [八一中文网](https://www.81zw.app)
 * [顶点小说](https://www.booktxt.com)
 * [笔趣阁](https://www.ibiqiuge.com)
 
