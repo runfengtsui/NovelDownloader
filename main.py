@@ -3,19 +3,14 @@ import json
 import sys
 from contextlib import redirect_stdout
 
-from noveldl.biquge import Biquge
-from noveldl.match import is_biquge365_url, is_washai_url
-from noveldl.search import SEARCHERS, search_all
-from noveldl.washai import Washai
+from noveldl.registry import SITES, detect_site, search_all
 
 
 def download(url: str, use_proxy: bool = False) -> None:
-    if is_biquge365_url(url):
-        Biquge(url, use_proxy=use_proxy).crawl()
-    elif is_washai_url(url):
-        Washai(url, use_proxy=use_proxy).crawl()
-    else:
+    site = detect_site(url)
+    if site is None:
         raise Exception("该网址无效或暂不支持该网站小说的下载!")
+    site.downloader(url, use_proxy=use_proxy).crawl()
 
 
 def print_results(results) -> None:
@@ -108,7 +103,7 @@ def build_parser() -> argparse.ArgumentParser:
     search_parser.add_argument("-k", "--keyword", required=True,
                                help="书名或作者关键词")
     search_parser.add_argument("-s", "--site", nargs="+", default=None,
-                               choices=list(SEARCHERS) + ["all"],
+                               choices=list(SITES) + ["all"],
                                help="搜索站点, 默认全部")
     search_parser.add_argument("-n", "--limit", type=positive_int, default=None,
                                help="每个站点最多返回的结果数, 默认全部")

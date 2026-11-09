@@ -14,5 +14,7 @@
 
 - `noveldl`: 爬虫核心功能
 - `noveldl/network`: 网络直连和代理模式
-- `noveldl/search.py`: 站点搜索功能
+- `noveldl/base.py`: 请求、下载与搜索的公共基类
+- `noveldl/biquge.py` / `noveldl/washai.py`: 各站点的下载器与搜索器
+- `noveldl/registry.py`: 站点注册表与统一搜索入口
 - `main.py`: 命令行接口, 提供 `download` 与 `search` 两个子命令

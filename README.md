@@ -1,6 +1,6 @@
 # Novel Downloader
 
-本项目为练习 Python 爬虫所作. 目前实现了以下网站的爬取:
+本项目为练习 Python 爬虫所作. 目前实现了以下网站的爬取与搜索:
 * [笔趣阁](https://www.biquge365.net/)
 * [书海阁](https://book.washai.net)
 
@@ -19,11 +19,10 @@ noveldl/
 ├── network/
 │   ├── proxy.py      # 免费代理池: 多源加载、去重、评分、轮换
 │   └── http.py       # 本机 IP 直连: 限速与 429 退避
-├── base.py           # 请求基类: 直连/代理选择、GET/POST、Cookie
-├── BaseTemplate.py   # 爬虫模板: 保存章节、通用 crawl
-├── search.py         # 站点搜索: 笔趣阁、书海阁
-├── washai.py         # 书海阁
-├── biquge.py         # 笔趣阁
+├── base.py           # 公共基类: 请求、下载模板、搜索模板、搜索结果
+├── biquge.py         # 笔趣阁: 下载 + 搜索
+├── washai.py         # 书海阁: 下载 + 搜索
+├── registry.py       # 站点注册表: 统一下载分发与搜索聚合
 └── match.py          # 网址匹配
 ```
 
