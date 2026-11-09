@@ -4,6 +4,7 @@ import os
 os.environ.setdefault('TQDM_DISABLE', '1')
 
 import random
+import sys
 import threading
 import time
 from collections import defaultdict
@@ -56,11 +57,14 @@ class ProxyPool:
         self._sessions_lock = threading.Lock()
         self._loading = False
         self._last_refresh = 0.0
+        # 使用同一个 Session 保存 Cookie (如书海阁的浏览器令牌), 代理仍按请求轮换.
+        self.session = requests.Session()
         self._load_proxies()
 
     def _log(self, message: str) -> None:
         if self.verbose:
-            print(message)
+            # 日志走 stderr, 避免后台线程输出污染 --json 的 stdout.
+            print(message, file=sys.stderr)
 
     def _default_sources(self) -> list:
         return [source for source in freeproxy.ProxiedSessionBuilder.REGISTERED_MODULES
@@ -187,6 +191,16 @@ class ProxyPool:
 
     def get(self, url: str, headers: dict) -> str:
         """依次尝试代理获取网页, 全部失败返回空字符串."""
+        return self._request("GET", url, headers)
+
+    def post(self, url: str, headers: dict, data: dict) -> str:
+        """通过代理提交表单, 全部失败返回空字符串."""
+        return self._request("POST", url, headers, data)
+
+    def cookie(self, name: str) -> str:
+        return self.session.cookies.get(name, "")
+
+    def _request(self, method: str, url: str, headers: dict, data=None) -> str:
         deadline = time.monotonic() + self.budget
         for attempt in range(self.max_attempts):
             if time.monotonic() > deadline:
@@ -195,9 +209,11 @@ class ProxyPool:
             if proxy is None:
                 break
             try:
-                r = requests.get(
+                r = self.session.request(
+                    method,
                     url,
                     headers=headers,
+                    data=data,
                     proxies=proxy.requests_format_proxy,
                     timeout=self.timeout,
                 )

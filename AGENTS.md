@@ -14,4 +14,5 @@
 
 - `noveldl`: 爬虫核心功能
 - `noveldl/network`: 网络直连和代理模式
-- `download.py`: 命令行接口
+- `noveldl/search.py`: 站点搜索功能
+- `main.py`: 命令行接口, 提供 `download` 与 `search` 两个子命令
