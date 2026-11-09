@@ -1,49 +1,58 @@
 # Novel Downloader
 
 本项目为练习 Python 爬虫所作. 目前实现了以下网站的爬取:
-
-* [八一中文网](https://www.81zw.app)
-* [顶点小说](https://www.booktxt.com)
 * [笔趣阁](https://www.biquge365.net/)
+* [书海阁](https://book.washai.net)
 
-## 下载
+## 克隆下载
 
-运行以下命令下载本项目:
-
+通过 `git` 克隆本项目源代码:
 ```git
-git clone https://github.com/RunfengTsui/NovelDownloader.git
+git clone https://github.com/runfengtsui/NovelDownloader.git
 ```
 
-## 第三方库
+项目结构如下:
 
-本项目使用 `poetry` 管理第三方库, 其中 `requests` 库获取页面, `lxml` 库解析页面. 同时, 本项目使用了 `fake_useragent` 库来提供随机的浏览器头, `pyfreeproxy` [获取免费代理](https://freeproxy.readthedocs.io/en/latest/Quickstart.html#id2).
+```text
+noveldl/
+├── network/
+│   ├── proxy.py      # 免费代理池: 多源加载、去重、评分、轮换
+│   └── http.py       # 本机 IP 直连: 限速与 429 退避
+├── BaseTemplate.py   # 爬虫模板: 选择请求方式、保存、通用 crawl
+├── washai.py         # 书海阁
+├── biquge.py         # 笔趣阁
+└── match.py          # 网址匹配
+```
 
-直接运行下述命令安装所需要的第三方库:
+## 虚拟环境
 
+使用 `venv` 虚拟环境并激活:
 ```shell
-poetry install
+python3 -m venv .venv
+# for Windows
+source .venv\Scripts\Activate.ps1
+# for Linux
+source .venv/bin/activate
 ```
 
-(也可以使用 `pip3` 分别进行安装).
+## 依赖管理
 
-## 使用
-
-本项目目前为命令行工具, 须在终端中使用.
-
+`Python` 版本要求为 `3.10+`，项目所使用的第三方包依赖见 `pyproject.toml`，使用 `pip3` 安装:
 ```shell
-cd NovelDownloader
-poetry shell    # 激活虚拟环境, 如果使用 pip3 安装第三方库则不需要
+pip3 install -e .
 ```
 
-通过 `-h` 参数查看帮助:
+## 命令行使用帮助
 
+本项目目前为命令行工具, 须在终端中使用，可以通过 `-h` 参数查看帮助:
 ```shell
 > python3 download.py -h
-usage: download.py [-h] -u URL
+usage: download.py [-h] -u URL [--proxy]
 
 options:
-  -h, --help         show this help message and exit    
-  -u URL, --url URL  novel download url
+  -h, --help            show this help message and exit
+  -u URL, --url URL     novel download url
+  --proxy               use free proxy pool (slower; default: direct connection)
 ```
 
 使用 `-u` 或者 `--url` 参数传递要爬取的小说的网址(需要在支持内), 即可爬取相应的内容并保存在当前目录下:
@@ -54,6 +63,5 @@ python3 download.py -u url
 
 ## Todo
 
-* 支持更多的网站;
 * 增加搜索小说的功能;
 * 支持多线程爬虫;

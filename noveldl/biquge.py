@@ -1,20 +1,14 @@
 from noveldl.BaseTemplate import BaseTemplate
-from freeproxy import freeproxy
 from lxml import etree
 from typing import List
 
 
-class Biquge365(BaseTemplate):
+class Biquge(BaseTemplate):
 
-    def __init__(self, bookurl: str) -> None:
-        self.bookname = ""
+    def __init__(self, bookurl: str, use_proxy: bool = False) -> None:
         if "newbook" not in bookurl:
-            self.bookurl = bookurl.replace("book", "newbook")
-        else:
-            self.bookurl = bookurl
-        proxy_sources = ['proxylistplus', 'kuaidaili']
-        self.fp_client = freeproxy.FreeProxy(proxy_sources=proxy_sources)
-        self.total_time = 0
+            bookurl = bookurl.replace("book", "newbook")
+        super().__init__(bookurl, use_proxy=use_proxy)
 
     def parse_book(self) -> List:
         html = self.get_html_text(self.bookurl)

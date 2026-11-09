@@ -1,2 +1,7 @@
+# Python
+.venv
 __pycache__
+## pyproject.toml
+*.egg-info
+
 *.txt

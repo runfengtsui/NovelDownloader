@@ -1,17 +1,15 @@
 import argparse
+import sys
 from noveldl.match import *
-from noveldl.Chinese81 import Chinese81
-from noveldl.Biquge365 import Biquge365
-from noveldl.BookTxt import BookTxt
+from noveldl.biquge import Biquge
+from noveldl.washai import Washai
 
 
-def download(url: str) -> None:
-    if is_booktxt_url(url):
-        BookTxt(url).crawl()
-    elif is_81zw_url(url):
-        Chinese81(url).crawl()
-    elif is_biquge365_url(url):
-        Biquge365(url).crawl()
+def download(url: str, use_proxy: bool = False) -> None:
+    if is_biquge365_url(url):
+        Biquge(url, use_proxy=use_proxy).crawl()
+    elif is_washai_url(url):
+        Washai(url, use_proxy=use_proxy).crawl()
     else:
         raise Exception("该网址无效或暂不支持该网站小说的下载!")
 
@@ -19,6 +17,12 @@ def download(url: str) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-u", "--url", required=True, help="novel download url")
+    parser.add_argument("--proxy", action="store_true",
+                        help="use free proxy pool (slower; default: direct connection)")
     args = parser.parse_args()
-    download(args.url)
+    try:
+        download(args.url, args.proxy)
+    except RuntimeError as exc:
+        print(f"错误: {exc}")
+        sys.exit(1)
 
